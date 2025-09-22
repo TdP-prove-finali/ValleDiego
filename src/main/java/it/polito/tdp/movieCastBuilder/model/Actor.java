@@ -18,17 +18,18 @@ public class Actor {//ho aggiunto un dataset con informazioni sugli attori, qual
 	private double metaScoreTot;
 	private double imbdRatingTot;
 	
-	private double sintoniaAttori;
 	private double intesaRegista;
 	private double incassoFilm;
 	private double approvazioneCritica;
 	private double approvazionePubblico;
 	private double affinitaGenere;
 	
+	private double statActor; //serve per prendere i 200 migliori
+	
 	public Actor(String name, int birthYear, String profession, String knowForTitle, double jw, double nMoviesTot, double nMoviesDirector,
 			double nMoviesGenre, double grossTot, double metaScoreTot, double imbdRatingTot, double sintoniaAttori,
 			double intesaRegista, double incassoFilm, double approvazioneCritica, double approvazionePubblico,
-			double affinitaGenere) {
+			double affinitaGenere, double statActor) {
 		super();
 		
 		this.name = name;
@@ -42,12 +43,12 @@ public class Actor {//ho aggiunto un dataset con informazioni sugli attori, qual
 		this.grossTot = grossTot;
 		this.metaScoreTot = metaScoreTot;
 		this.imbdRatingTot = imbdRatingTot;
-		this.sintoniaAttori = sintoniaAttori;
 		this.intesaRegista = intesaRegista;
 		this.incassoFilm = incassoFilm;
 		this.approvazioneCritica = approvazioneCritica;
 		this.approvazionePubblico = approvazionePubblico;
 		this.affinitaGenere = affinitaGenere;
+		this.statActor = statActor;
 	}
 
 	public double getnMoviesTot() {
@@ -109,14 +110,6 @@ public class Actor {//ho aggiunto un dataset con informazioni sugli attori, qual
 	public String getProfession() {
 		return profession;
 	}
-	
-	public double getSintoniaAttori() {
-		return sintoniaAttori;
-	}
-
-	public void setSintoniaAttori(double sintoniaAttori) {
-		this.sintoniaAttori = sintoniaAttori;
-	}
 
 	public double getIntesaRegista() {
 		return intesaRegista;
@@ -169,6 +162,14 @@ public class Actor {//ho aggiunto un dataset con informazioni sugli attori, qual
 	public void setJw(double jw) {
 		this.jw = jw;
 	}
+	
+	public double getStatActor() {
+		return statActor;
+	}
+
+	public void setStatActor(double statActor) {
+		this.statActor = statActor;
+	}
 
 	@Override
 	public int hashCode() {
@@ -192,9 +193,9 @@ public class Actor {//ho aggiunto un dataset con informazioni sugli attori, qual
 		return "Actor [name=" + name + ", birthYear=" + birthYear + /*", profession="
 				+ profession + */ ", nMoviesTot=" + nMoviesTot + ", nMoviesDirector=" + nMoviesDirector + ", nMoviesGenre="
 				+ nMoviesGenre + ", grossTot=" + grossTot + ", metaScoreTot=" + metaScoreTot + ", imbdRatingTot="
-				+ imbdRatingTot + ", sintoniaAttori=" + sintoniaAttori + ", intesaRegista=" + intesaRegista
+				+ imbdRatingTot + ", intesaRegista=" + intesaRegista
 				+ ", incassoFilm=" + incassoFilm + ", approvazioneCritica=" + approvazioneCritica
-				+ ", approvazionePubblico=" + approvazionePubblico + ", affinitaGenere=" + affinitaGenere + "] +\n";
+				+ ", approvazionePubblico=" + approvazionePubblico + ", affinitaGenere=" + affinitaGenere + ", statActor=" + statActor + "] +\n";
 	}
 
 	

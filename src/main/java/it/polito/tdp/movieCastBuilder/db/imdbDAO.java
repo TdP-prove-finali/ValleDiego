@@ -9,11 +9,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import info.debatty.java.stringsimilarity.JaroWinkler;
 import it.polito.tdp.movieCastBuilder.model.Actor;
 import it.polito.tdp.movieCastBuilder.model.Movie;
+import it.polito.tdp.movieCastBuilder.model.Pair;
 
 
 
@@ -126,13 +128,13 @@ public class imdbDAO {
 			st.setString(4, "%" + genre + "%");
 			
 			ResultSet res = st.executeQuery() ;
-			while(res.next()) { // è necessario evitare omonimi, non avendo modo di sapere qual'è l'attore giusto, ho escogitato questi metodi
+			while(res.next()) { // è necessario evitare omonimi, non avendo modo di sapere qual'è l'attore giusto, ho escogitato questi metodi per scegliere quello verosimilmente corretto 
 				
 			
 				JaroWinkler jw = new JaroWinkler();
 				double now = jw.similarity(res.getString("knowForTitle"), res.getString("movie"));
 				
-				Actor a = new Actor(res.getString("name"),res.getInt("birthYear"),res.getString("profession"),res.getString("knowForTitle"),now,0,0,0,0,0,0,0,0,0,0,0,0);
+				Actor a = new Actor(res.getString("name"),res.getInt("birthYear"),res.getString("profession"),res.getString("knowForTitle"),now,0,0,0,0,0,0,0,0,0,0,0,0,0);
 				
 				if(!mActor.containsKey(res.getString("name"))) {//se il nome non c'è lo aggiungo
 					
@@ -183,7 +185,7 @@ public class imdbDAO {
 			return null;
 		}
 		
-		System.out.println(mActor.values().size());
+		//System.out.println(mActor.values().size());
 		
 		return new ArrayList<>(mActor.values());
 
@@ -356,6 +358,69 @@ public class imdbDAO {
 			e.printStackTrace();
 			return (Integer) null;
 		}
+		return result;
+	}
+
+	public List<Pair> getArchi(Set<Actor> lActor) {
+		// TODO Auto-generated method stub
+		String sql = "SELECT \r "
+				+ "    LEAST(actor1, actor2) AS a1,\r "
+				+ "    GREATEST(actor1, actor2) AS a2,\r "
+				+ "    COUNT(*) AS weight\r "
+				+ "FROM (\r "
+				+ "    SELECT genre, star1 AS actor1, star2 AS actor2 FROM movies \r "
+				+ "    UNION ALL\r "
+				+ "    SELECT genre, star1 AS actor1, star3 AS actor2 FROM movies \r "
+				+ "    UNION ALL\r "
+				+ "    SELECT genre, star1 AS actor1, star4 AS actor2 FROM movies \r "
+				+ "    UNION ALL\r "
+				+ "    SELECT genre, star2 AS actor1, star3 AS actor2 FROM movies \r "
+				+ "    UNION ALL\r "
+				+ "    SELECT genre, star2 AS actor1, star4 AS actor2 FROM movies \r "
+				+ "    UNION ALL\r "
+				+ "    SELECT genre, star3 AS actor1, star4 AS actor2 FROM movies \r "
+				+ ") AS actor_pairs\r "
+				+ " WHERE actor1 <> actor2\r "
+				+ "GROUP BY actor1, actor2\r "
+				+ "ORDER BY weight DESC;\r "
+				+ "";
+		List<Pair> result = new ArrayList<>();
+		
+		
+		
+		try {
+			Connection conn = DBConnect.getConnection() ;
+			PreparedStatement st = conn.prepareStatement(sql) ;
+			
+			ResultSet res = st.executeQuery() ;
+			
+			Map<String,Actor> mActor = new TreeMap<>();
+			
+			for(Actor a : lActor) {
+				mActor.put(a.getName(), a);
+			}
+			while(res.next()) {
+				
+				if(mActor.containsKey(res.getString("a1")) && mActor.containsKey(res.getString("a2"))) {
+					
+					result.add(new Pair(mActor.get(res.getString("a1")),mActor.get(res.getString("a2")),res.getInt("weight")));
+					
+				}
+				
+			}
+			//System.out.println("coppie : "+result);
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		for(Pair p : result) {
+			if(p.getA1().equals(p.getA2())) {
+				System.out.println(p);
+			}
+		}
+		
 		return result;
 	}
 	

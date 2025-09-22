@@ -100,11 +100,11 @@ public class Movie {
 
 	@Override
 	public String toString() {
-		return "Movie [Poster=" + Poster + ", Title=" + Title + ", releasedYear=" + releasedYear + ", Certificate="
+		return "Movie ["+/* Poster=" + Poster + ",*/  " Title = " + Title + ", releasedYear=" + releasedYear + ", Certificate="
 				+ Certificate + ", Runtime ="
 						+ Runtime + ", Genre=" + Genre + ", ImdbRating=" + ImdbRating + ", Overview=" + Overview
 				+ ", Director=" + Director + ", MetaScore=" + MetaScore + ", Cast=" + Cast + ", NumVotes=" + NumVotes
-				+ ", Gross=" + Gross + "]";
+				+ ", Gross=" + Gross + " /n ]\n";
 	}
 	
 	
