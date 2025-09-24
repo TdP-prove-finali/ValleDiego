@@ -136,7 +136,7 @@ public class imdbDAO {
 				
 				Actor a = new Actor(res.getString("name"),res.getInt("birthYear"),res.getString("profession"),res.getString("knowForTitle"),now,0,0,0,0,0,0,0,0,0,0,0,0,0);
 				
-				if(!mActor.containsKey(res.getString("name"))) {//se il nome non c'è lo aggiungo
+				if(!mActor.containsKey(res.getString("name"))) {//se il nome non c'è lo aggiungo, altrimenti deciderò quale dei 2 attori tenere
 					
 					a.setJw(now);
 					mActor.put(res.getString("name"), a);

@@ -260,7 +260,7 @@ public class Model {
 		//Parte la prima ricorsione
 		
 		long startTime = System.currentTimeMillis();
-		//cerca(c, rimanenti, 0);
+		//cerca(c, rimanenti, 0);  //tentativo che controlla mappe al posto del grafo, da eliminare probabilmente
 		cerca2(c, rimanenti, 0);
 		
 		long endTime = System.currentTimeMillis();
@@ -476,11 +476,14 @@ public class Model {
 		}
 		
 	}
+	
+	// Il metodo "cerca" qui sotto è una prova in cui ho usato una mappa invece di controllare il grafo, sperando di risparmiare tempo.
+	// Purtroppo impiega lo stesso identico tempo, forse per la creazione di troppe nuove Pair. Se non è migliorabile, verrà eliminato
 
 
 	private void cerca(Cast c, List<Actor> rimanenti, int start) {
 		// TODO Auto-generated method stub
-		
+			
 		//condizione di terminazione
 		
 				if(c.getA4() != null) {
@@ -658,7 +661,7 @@ public class Model {
 		return bestCast;
 	}
 
-	private void calculateSintoniaAttori(Cast c) {//inizialmente queste funzioni venivano chiamate svariate volte nelle ricorsioni, ma ho poi notato che ricpiando il codice senza chiamarne la fuzione diminuiva drasticamente i tempi di esecuzione. Adesso solo più Replace() le chiama
+	private void calculateSintoniaAttori(Cast c) {//inizialmente queste funzioni venivano chiamate svariate volte nelle ricorsioni, ma ho poi notato che ricopiando il codice senza chiamare la fuzione diminuiva drasticamente i tempi di esecuzione. Adesso solo più Replace() le chiama
 		// TODO Auto-generated method stub
 		if(this.grafo.getEdge(c.getA1(), c.getA2()) != null) {
 			c.setSintoniaAttori(c.getSintoniaAttori() + this.grafo.getEdgeWeight(this.grafo.getEdge(c.getA1(), c.getA2())));
