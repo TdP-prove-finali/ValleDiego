@@ -25,6 +25,7 @@ public class Model {
 	private Graph<Actor, DefaultWeightedEdge> grafo;
 	private Map<Pair, Integer> mPair = new HashMap<>();
 	private List<Actor> poolActors = new LinkedList<>();
+	private List<Actor> removed = new LinkedList<>();
 	private Cast bestCast = new Cast (null,null,null,null,0,0,0,0,0,0,0);
 	
 	private PriorityQueue<Actor> pq = new PriorityQueue<>(Comparator.comparingDouble(Actor::getStatActor));
@@ -74,15 +75,17 @@ public class Model {
 		}
 
 
-	public void getGenre() {
+	public List<String> getGenre() {
 		// TODO Auto-generated method stub
 		System.out.println("Genre: "+this.lGenres.size()+lGenres);
+		return lGenres;
 	}
 
-	public void getDirector(String genre) {
+	public List<String> getDirector(String genre) {
 		// TODO Auto-generated method stub
 		this.lDirectors = this.dao.getDirector(genre);
 		System.out.println("\nDirector: "+lDirectors.size()+"\n ");
+		return lDirectors;
 	}
 
 	public Cast findCast(String genre, String director, double inputIncassoFilm, double inputApprovazioneCritica, double inputApprovazionePubblico, double inputSintoniaAttori, double inputIntesaRegista, double inputAffinitaGenere) {
@@ -141,6 +144,10 @@ public class Model {
 		System.out.println("minDirector = "+minDirector);
 		System.out.println("minGenre = "+minGenre+"\n");
 		
+		if(maxDirector == 0) {//caso in cui regista ha un film con attori morti o assenti dal database
+			maxDirector = 1;
+		}
+		
 		// Calcolo le caratteristiche
 		
 		
@@ -194,6 +201,12 @@ public class Model {
 		System.out.println("maxApprovazionePubblico = "+maxApprovazionePubblico);
 		System.out.println("minApprovazionePubblico = "+minApprovazionePubblico);
 		
+		
+		if(maxIntesaRegista == 0) {//Caso in cui regista vivo e attori nel suo film no. Intesa regista diventa inutile, ma tenere 0 da null sul best cast
+			maxIntesaRegista = 1;
+			minIntesaRegista = 0;
+		}
+		
 		//Normalizzo le caratteristiche e applico le preferenze dell'utente
 		
 		for (Actor a : this.grafo.vertexSet()) {
@@ -233,6 +246,9 @@ public class Model {
 		}else {
 			poolActors.addAll(this.grafo.vertexSet());
 		}
+		
+		removed.clear();
+		
 		//System.out.println("Primo escluso: " + pq.peek().getStatActor() + "\n" + pq.peek());
 		
 		//trovo i massimi e minimi per la sesta caratteristica
@@ -636,12 +652,13 @@ public class Model {
 			parziale.add(oldCast.getA4());
 		}
 		
+		removed.add(rimosso);
 		newCast = new Cast(parziale.get(0), parziale.get(1), parziale.get(2), null, 0,0,0,0,0,0,0);
 		maxStatCast = 0;
 		
 		for(Actor a : this.grafo.vertexSet()) {
 			
-			if(!a.equals(rimosso) && !newCast.getA1().equals(a) && !newCast.getA2().equals(a) && !newCast.getA3().equals(a)) {
+			if(!a.equals(rimosso) && !newCast.getA1().equals(a) && !newCast.getA2().equals(a) && !newCast.getA3().equals(a) && !removed.contains(a)) {
 			
 				newCast.setA4(a);
 				newCast.setSintoniaAttori(0);

@@ -187,15 +187,19 @@ public class Actor {//ho aggiunto un dataset con informazioni sugli attori, qual
 		Actor other = (Actor) obj;
 		return Objects.equals(name, other.name);
 	}
-
-	@Override
+	//Utile per debug
+//	@Override 
+//	public String toString() {
+//		return "Actor [name=" + name + ", birthYear=" + birthYear + ", profession="
+//				+ profession +  ", nMoviesTot=" + nMoviesTot + ", nMoviesDirector=" + nMoviesDirector + ", nMoviesGenre="
+//				+ nMoviesGenre + ", grossTot=" + grossTot + ", metaScoreTot=" + metaScoreTot + ", imbdRatingTot="
+//				+ imbdRatingTot + ", intesaRegista=" + intesaRegista
+//				+ ", incassoFilm=" + incassoFilm + ", approvazioneCritica=" + approvazioneCritica
+//				+ ", approvazionePubblico=" + approvazionePubblico + ", affinitaGenere=" + affinitaGenere + ", statActor=" + statActor + "] +\n";
+//	}
+	
 	public String toString() {
-		return "Actor [name=" + name + ", birthYear=" + birthYear + /*", profession="
-				+ profession + */ ", nMoviesTot=" + nMoviesTot + ", nMoviesDirector=" + nMoviesDirector + ", nMoviesGenre="
-				+ nMoviesGenre + ", grossTot=" + grossTot + ", metaScoreTot=" + metaScoreTot + ", imbdRatingTot="
-				+ imbdRatingTot + ", intesaRegista=" + intesaRegista
-				+ ", incassoFilm=" + incassoFilm + ", approvazioneCritica=" + approvazioneCritica
-				+ ", approvazionePubblico=" + approvazionePubblico + ", affinitaGenere=" + affinitaGenere + ", statActor=" + statActor + "] +\n";
+		return name; 
 	}
 
 	
