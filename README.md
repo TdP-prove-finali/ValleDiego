@@ -7,7 +7,7 @@
 ## ⚙️ Istruzioni per l'installazione e l'utilizzo
 
 1. Effettuare il *fork* del [repository](https://github.com/TdP-prove-finali/ValleDiego) e importare il progetto nel proprio ambiente di sviluppo (Eclipse o altri).  
-2. Importare ed eseguire il file [`topfilm.sql`](topfilm.sql) contenuto nella cartella `database` tramite il proprio DBMS.  
+2. Importare ed eseguire il file [`topfilm.sql`](database/topfilm.sql) contenuto nella cartella `database` tramite il proprio DBMS.  
 3. Inserire la password di accesso al DBMS nel metodo `setPassword` all'interno della classe `DBConnect`.  
 4. Eseguire la classe `Main` per avviare l'applicazione.
 
