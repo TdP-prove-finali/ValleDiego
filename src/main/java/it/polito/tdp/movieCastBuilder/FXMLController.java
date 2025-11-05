@@ -146,7 +146,6 @@ public class FXMLController {
     void doGenerateCast(ActionEvent event) {
     	
     	btnGenerateCast.setDisable(true);
-    	//lblAttesa.setText("Attendere qualche secondo");
     	
     	BestCast = this.model.findCast(cmbGenre.getValue(), cmbDirector.getValue(), convert(slIncassoFilm.getValue()), 
     			convert(slApprovazioneCritica.getValue()), convert(slApprovazionePubblico.getValue()), convert(slSintoniaAttori.getValue()), 
@@ -166,7 +165,7 @@ public class FXMLController {
     	txtBestCast.getItems().clear();
     	cmbActor.getItems().clear();
     	tblCurriculum.getItems().clear();
-    	txtCurriculum.setText("Seleziona un attore per vederne il curriculum");
+    	txtCurriculum.setText("Seleziona un attore per vederne le info");
     	
     	txtBestCast.getItems().add(BestCast.getA1());
     	txtBestCast.getItems().add(BestCast.getA2());

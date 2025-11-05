@@ -84,7 +84,7 @@ public class imdbDAO {
 	public List<Actor> getVertici(String genre) {
 		// TODO Auto-generated method stub
 		
-		String sql = "WITH attori_film_fantasy AS (\r "
+		String sql = "WITH attori AS (\r "
 				+ "    SELECT Star1 AS attore, series_Title, Released_Year\r "
 				+ "    FROM topFilm.movies\r "
 				+ "    WHERE Genre LIKE ?\r "
@@ -109,7 +109,7 @@ public class imdbDAO {
 				+ "    af.series_Title AS movie,\r "
 				+ "    af.Released_Year \r "
 				+ "FROM\r "
-				+ "    attori_film_fantasy af\r "
+				+ "    attori af\r "
 				+ "JOIN\r "
 				+ "    actor a ON af.attore = a.primaryName\r "
 				+ "WHERE\r "
@@ -128,20 +128,24 @@ public class imdbDAO {
 			st.setString(4, "%" + genre + "%");
 			
 			ResultSet res = st.executeQuery() ;
-			while(res.next()) { // è necessario evitare omonimi, non avendo modo di sapere qual'è l'attore giusto, ho escogitato questi metodi per scegliere quello verosimilmente corretto 
+			while(res.next()) { // è necessario evitare omonimi, non avendo modo di sapere qual'è 
+				//l'attore giusto, ho escogitato questi metodi per scegliere quello verosimilmente corretto 
 				
-			
 				JaroWinkler jw = new JaroWinkler();
 				double now = jw.similarity(res.getString("knowForTitle"), res.getString("movie"));
 				
-				Actor a = new Actor(res.getString("name"),res.getInt("birthYear"),res.getString("profession"),res.getString("knowForTitle"),now,0,0,0,0,0,0,0,0,0,0,0,0,0);
+				Actor a = new Actor(res.getString("name"),res.getInt("birthYear"),res.getString("profession"),
+						res.getString("knowForTitle"),now,0,0,0,0,0,0,0,0,0,0,0,0,0);
 				
-				if(!mActor.containsKey(res.getString("name"))) {//se il nome non c'è lo aggiungo, altrimenti deciderò quale dei 2 attori tenere
+				if(!mActor.containsKey(res.getString("name"))) {//se il nome non c'è lo aggiungo, altrimenti 
+					//deciderò quale dei 2 attori tenere
 					
 					a.setJw(now);
 					mActor.put(res.getString("name"), a);
 					
-				}else if((mActor.get(res.getString("name")).getBirthYear() != res.getInt("birthYear")) || (!mActor.get(res.getString("name")).getProfession().equals(res.getString("profession")))) {//controllo che non sia lo stesso attore
+				}else if((mActor.get(res.getString("name")).getBirthYear() != res.getInt("birthYear")) || 
+						(!mActor.get(res.getString("name")).getProfession().equals(res.getString("profession")))) 
+				{//controllo che non sia lo stesso attore
 					
 					double old = mActor.get(res.getString("name")).getJw();
 					
@@ -152,45 +156,37 @@ public class imdbDAO {
 				        
 					}else if(!(now < 0.62 && old >= 0.62)){// Controllo se rimane il vecchio attore per somiglianza nome
 						
-						if(((a.getProfession().contains("actor")) && !(mActor.get(res.getString("name")).getProfession().contains("actor")))
-							|| ((a.getProfession().contains("actress")) && !(mActor.get(res.getString("name")).getProfession().contains("actress")))) {// controllo se il nuovo attore ha actor nel nome, a differenza di quello vecchio
+						if(((a.getProfession().contains("actor")) && !(mActor.get(res.getString("name")).getProfession()
+								.contains("actor")))|| ((a.getProfession().contains("actress")) && !(mActor.get(res.
+										getString("name")).getProfession().contains("actress")))) {// controllo se il nuovo 
+							//attore ha actor nel nome, a differenza di quello vecchio
 							
 								a.setJw(now);
 								mActor.put(res.getString("name"), a);
 							
-						}else if(!((!(a.getProfession().contains("actor")) && (mActor.get(res.getString("name")).getProfession().contains("actor")))
-								|| (!(a.getProfession().contains("actress")) && (mActor.get(res.getString("name")).getProfession().contains("actress"))))){// controllo se il vecchio attore ha actor nel nome, a differenza di quello nuovo
+						}else if(!((!(a.getProfession().contains("actor")) && (mActor.get(res.getString("name")).
+								getProfession().contains("actor"))) || (!(a.getProfession().contains("actress")) && (mActor.
+										get(res.getString("name")).getProfession().contains("actress"))))){// controllo se 
+							//il vecchio attore ha actor nel nome, a differenza di quello nuovo
 							
-								if(now > old) {//non è sicuro chi sia l'attore giusto. a caso scelgo di mettere chi ha il nome più simile. 
+					           if(now > old) {//non è sicuro chi sia l'attore giusto. 
+					        	   //a caso scelgo di mettere chi ha il nome più simile. 
 									
 									mActor.remove(res.getString("name"));
 									mActor.put(res.getString("name"), a);
-								
 								}
-							
-							
 						}
-						
 					}
-					
 				}else if(a.getJw() < now) { //Aggiorno il valore jw
 					a.setJw(now);
 				}
-				
 			}
-			
 			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
-		
-		//System.out.println(mActor.values().size());
-		
 		return new ArrayList<>(mActor.values());
-
-		
-		
 	}
 
 	public List<Movie> getMovies() {
@@ -385,8 +381,6 @@ public class imdbDAO {
 				+ "ORDER BY weight DESC;\r "
 				+ "";
 		List<Pair> result = new ArrayList<>();
-		
-		
 		
 		try {
 			Connection conn = DBConnect.getConnection() ;
